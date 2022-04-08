@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { getOne } from '../../services/cats'
 import '../../styles/Form.css'
 
 // Services
@@ -26,7 +27,20 @@ const CatForm = (props) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  useEffect(() => {}, [id])
+  useEffect(() => {
+    const fetchOne = async () => {
+      const data = await getOne(id)
+      setForm({
+        id: data.cat.id,
+        name: data.cat.name,
+        breed: data.cat.breed,
+        description: data.cat.description,
+        age: data.cat.age
+      })
+    }
+    id && fetchOne()
+    return () => setForm({})
+  }, [id])
 
   return (
     <>
